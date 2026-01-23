@@ -13,6 +13,11 @@ import { CustomerRole } from '@/types';
 import { currencyFormat, ordersCurrencyFormat } from '@/utils/b3CurrencyFormat';
 import { displayFormat } from '@/utils/b3DateFormat';
 
+import {
+  getB2BOrderDetails,
+  getBCOrderDetails,
+} from '@/shared/service/b2b';
+
 import OrderStatus from './components/OrderStatus';
 import { orderStatusTranslationVariables } from './shared/getOrderStatus';
 import { B3Table, PossibleNodeWrapper, TableColumnItem } from './table/B3Table';
@@ -57,7 +62,25 @@ interface ListItem {
   createdAt: string;
   companyName: string;
   companyInfo?: CompanyInfoProps;
+  customerMessage?: string;
+  vendors?: string[];
 }
+
+// Extract UAG PO# from order comments (format: "UAG PO#: UAG123456")
+const extractUagPoNumber = (customerMessage?: string): string => {
+  if (!customerMessage) return '–';
+  const match = customerMessage.match(/UAG PO#:\s*(\S+)/i);
+  return match ? match[1] : '–';
+};
+
+// Extract unique vendors/brands from order products
+const extractVendors = (products?: { brand?: string }[]): string[] => {
+  if (!products || products.length === 0) return [];
+  const vendors = products
+    .map((p) => p.brand)
+    .filter((brand): brand is string => Boolean(brand && brand.trim()));
+  return [...new Set(vendors)]; // Return unique vendors
+};
 
 interface SearchChangeProps {
   startValue?: string;
@@ -230,8 +253,28 @@ function Order({ isCompanyOrder = false }: OrderProps) {
 
     setAllTotal(totalCount);
 
+    const orders = edges.map((row: PossibleNodeWrapper<object>) => ('node' in row ? row.node : row)) as ListItem[];
+
+    // Fetch order details for each order to get customerMessage (for UAG PO#) and vendors
+    const ordersWithDetails = await Promise.all(
+      orders.map(async (order) => {
+        try {
+          const details = isB2BUser
+            ? await getB2BOrderDetails(Number(order.orderId))
+            : await getBCOrderDetails(Number(order.orderId));
+          return {
+            ...order,
+            customerMessage: details?.customerMessage || '',
+            vendors: extractVendors(details?.products),
+          };
+        } catch {
+          return order;
+        }
+      })
+    );
+
     return {
-      edges: edges.map((row: PossibleNodeWrapper<object>) => ('node' in row ? row.node : row)),
+      edges: ordersWithDetails,
       totalCount,
     };
   };
@@ -277,6 +320,22 @@ function Order({ isCompanyOrder = false }: OrderProps) {
       render: ({ poNumber }) => <Box>{poNumber || '–'}</Box>,
       width: '10%',
       isSortable: true,
+    },
+    {
+      key: 'uagPoNumber',
+      title: 'UAG PO#',
+      render: ({ customerMessage }) => <Box>{extractUagPoNumber(customerMessage)}</Box>,
+      width: '10%',
+      isSortable: false,
+    },
+    {
+      key: 'vendors',
+      title: 'Vendors',
+      render: ({ vendors }) => (
+        <Box>{vendors && vendors.length > 0 ? vendors.join(', ') : '–'}</Box>
+      ),
+      width: '12%',
+      isSortable: false,
     },
     {
       key: 'totalIncTax',

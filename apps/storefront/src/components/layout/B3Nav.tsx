@@ -78,7 +78,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
     });
   };
 
-  const handleClick = (item: { configKey?: string; path: string }) => {
+  const handleClick = (item: { configKey?: string; path: string; isExternalLink?: boolean }) => {
     if (role === 100) {
       dispatch({
         type: 'common',
@@ -100,10 +100,24 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
       return;
     }
 
+    // Handle external links (navigate to store pages outside the buyer portal)
+    if (item.isExternalLink) {
+      window.location.href = item.path;
+      return;
+    }
+
     navigate(item.path);
     if (isMobile && closeSidebar) {
       closeSidebar(false);
     }
+  };
+
+  // External link to store's Dashboard page
+  const externalDashboardLink = {
+    path: '/dashboard',
+    name: 'Dashboard',
+    idLang: 'global.navMenu.externalDashboard',
+    isExternalLink: true,
   };
 
   useEffect(() => {
@@ -213,6 +227,13 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
+      {/* External Dashboard link at the top */}
+      <ListItem key="external-dashboard" disablePadding>
+        <ListItemButton onClick={() => handleClick(externalDashboardLink)}>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
+      </ListItem>
+
       {newRoutes.map((item) => {
         if (item.name === 'Quotes') {
           const { pathname } = location;

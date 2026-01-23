@@ -30,6 +30,12 @@ const accountTarget = [
 
 // Vault theme remove associated nav
 const removeBCMenus = () => {
+  // Don't remove menus on custom /dashboard page (handle with or without trailing slash)
+  const pathname = window.location.pathname.replace(/\/$/, '');
+  if (pathname === '/dashboard') {
+    return;
+  }
+
   hideAccountItems.forEach((item: string) => {
     const itemNodes = document.querySelectorAll(`[href^="${item}"]`);
 

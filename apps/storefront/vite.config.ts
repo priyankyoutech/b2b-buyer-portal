@@ -23,7 +23,7 @@ export default defineConfig(({ mode }): UserConfig & Pick<ViteUserConfig, 'test'
       },
     },
     server: {
-      port: 3001,
+      port: 3002,
       cors: true,
       proxy: {
         '/bigcommerce': {
