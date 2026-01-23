@@ -331,6 +331,10 @@ export default function App() {
       const { hash } = window.location;
       if (!hash || hash === '#/') {
         setOpenPage({ isOpen: false });
+      } else if (hash.startsWith('#/') && hash.length > 2) {
+        // Open the portal when navigating to a valid hash route
+        const openUrl = hash.substring(1); // Remove the leading '#'
+        setOpenPage({ isOpen: true, openUrl });
       }
     };
 
