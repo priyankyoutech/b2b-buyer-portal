@@ -151,50 +151,9 @@ input[type='number']::-webkit-outer-spin-button {
   flex-direction: column;
 }
 
-/* Hide original wishlist button since we're using B2B shopping list */
-.wishlist-button-container {
-  display: none !important;
-}
-
-/* Style B2B Add to Shopping List button to match theme */
+/* Hide B2B shopping list button - we use the original button instead */
 .b2b-add-to-list {
-  order: 3 !important;
-  flex-basis: 100% !important;
-  width: 100% !important;
-  margin-top: 0.5rem !important;
-  padding: 0.75rem 1rem !important;
-  background: transparent !important;
-  border: 1px solid #333 !important;
-  border-radius: 0 !important;
-  color: #333 !important;
-  font-size: 0.875rem !important;
-  font-weight: 600 !important;
-  font-family: Montserrat, Arial, Helvetica, sans-serif !important;
-  text-align: center !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  height: 48px !important;
-  box-sizing: border-box !important;
-}
-
-.b2b-add-to-list:hover {
-  background: #333 !important;
-  color: #fff !important;
-}
-
-/* Add heart icon before text using pseudo-element */
-.b2b-add-to-list::before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  flex-shrink: 0;
+  display: none !important;
 }
 
 .b2b-btn-loading {
