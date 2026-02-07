@@ -66,10 +66,10 @@ interface ListItem {
   vendors?: string[];
 }
 
-// Extract UAG PO# from order comments (format: "UAG PO#: UAG123456")
+// Extract UAG PO# from order comments (format: "UAG#UAG976835")
 const extractUagPoNumber = (customerMessage?: string): string => {
   if (!customerMessage) return '–';
-  const match = customerMessage.match(/UAG PO#:\s*(\S+)/i);
+  const match = customerMessage.match(/UAG#(\S+)/i);
   return match ? match[1] : '–';
 };
 
