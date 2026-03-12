@@ -151,11 +151,6 @@ input[type='number']::-webkit-outer-spin-button {
   flex-direction: column;
 }
 
-/* Hide B2B shopping list button - we use the original button instead */
-.b2b-add-to-list {
-  display: none !important;
-}
-
 .b2b-btn-loading {
   position: absolute;
   top: 50%;
