@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { UploadFile as UploadFileIcon } from '@mui/icons-material';
-import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
+import { HelpOutline as HelpOutlineIcon, UploadFile as UploadFileIcon } from '@mui/icons-material';
+import { Box, Card, CardContent, Collapse, Divider, Typography } from '@mui/material';
 
 import CustomButton from '@/components/button/CustomButton';
 import { B3Upload } from '@/components/upload/B3Upload';
@@ -27,6 +27,7 @@ export default function QuickOrderPad() {
   const b3Lang = useB3Lang();
 
   const [isOpenBulkLoadCSV, setIsOpenBulkLoadCSV] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
   const [productData, setProductData] = useState<ValidProductItem[]>([]);
   const [addBtnText, setAddBtnText] = useState<string>('Add to cart');
   const [isLoading, setIsLoading] = useState(false);
@@ -471,6 +472,78 @@ export default function QuickOrderPad() {
               {b3Lang('purchasedProducts.quickOrderPad.bulkUploadCSV')}
             </CustomButton>
           </Box>
+
+          <Box sx={{ margin: '8px 0 0' }}>
+            <CustomButton
+              variant="text"
+              onClick={() => setShowInstructions((prev) => !prev)}
+            >
+              <HelpOutlineIcon sx={{ marginRight: '8px' }} />
+              Instructions
+            </CustomButton>
+          </Box>
+
+          <Collapse in={showInstructions}>
+            <Box
+              sx={{
+                mt: 1,
+                p: 2,
+                backgroundColor: '#f5f5f5',
+                borderRadius: 1,
+                fontSize: '0.85rem',
+                lineHeight: 1.6,
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+                To use a sample CSV file to upload SKUs to your Add to Cart list
+              </Typography>
+              <Box component="ol" sx={{ m: 0, pl: 2.5 }}>
+                <li>
+                  Click &quot;BULK UPLOAD CSV&quot; and then &quot;Download sample&quot;
+                </li>
+                <li>
+                  &quot;variant_sku&quot; (Column A) is your desired SKU and &quot;qty&quot; (Column
+                  B) is your desired quantity
+                </li>
+                <li>
+                  It is important that the SKU values in the variant_sku field match the SKUs
+                  available on the Store
+                  <ul>
+                    <li>Make sure to include any dashes or underscores</li>
+                    <li>
+                      If a SKU in your CSV file cannot be found in the Store, then it will not be
+                      added to your Add to Cart list
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Do not change the Row 1 headings. Fill in variant_sku and qty in rows 2 and below
+                </li>
+                <li>
+                  Once the sample CSV file is complete, save it as a .CSV file
+                  <ul>
+                    <li>
+                      If using Windows Excel: Click on File &gt; Save As &gt; File Format &gt;
+                      Comma Separated Values (.csv)
+                    </li>
+                    <li>If using Mac Numbers: Click on File &gt; Export To &gt; CSV</li>
+                  </ul>
+                </li>
+                <li>Click Upload File and select your CSV file from your file explorer</li>
+                <li>
+                  As SKUs are matched to available products in the Store, you will see the items
+                  populate on the Add to Cart list
+                  <ul>
+                    <li>
+                      If an item appears in red, then it was not matched to an available item in the
+                      Store
+                    </li>
+                  </ul>
+                </li>
+                <li>Review the items and then click &quot;Add Products to Cart&quot;</li>
+              </Box>
+            </Box>
+          </Collapse>
         </Box>
       </CardContent>
 
