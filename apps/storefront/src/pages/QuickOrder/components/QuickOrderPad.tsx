@@ -490,11 +490,11 @@ export default function QuickOrderPad() {
                 p: 2,
                 backgroundColor: '#f5f5f5',
                 borderRadius: 1,
-                fontSize: '0.85rem',
+                fontSize: '1rem',
                 lineHeight: 1.6,
               }}
             >
-              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold', fontSize: '1rem' }}>
                 To use a sample CSV file to upload SKUs to your Add to Cart list
               </Typography>
               <Box component="ol" sx={{ m: 0, pl: 2.5 }}>
