@@ -84,6 +84,29 @@ const formatPrice = (price: string | number) => {
   }
 };
 
+const extendedTermsRateMap: Record<number, number> = {
+  60: 0.01,
+  90: 0.02,
+  120: 0.03,
+};
+
+const getExtendedTermsFee = (
+  customerMessage: string,
+  grandTotal: number,
+): { label: string; fee: number } | null => {
+  const match = customerMessage.match(/Extended Terms:\s*(\d+)\s*Day/i);
+  if (!match) return null;
+
+  const days = parseInt(match[1], 10);
+  const rate = extendedTermsRateMap[days];
+  if (rate === undefined) return null;
+
+  return {
+    label: `Extended Terms Fee (${days} Day)`,
+    fee: grandTotal * rate,
+  };
+};
+
 const getOrderSummary = (data: B2BOrderData, b3Lang: LangFormatFunction) => {
   const {
     dateCreated,
@@ -100,6 +123,7 @@ const getOrderSummary = (data: B2BOrderData, b3Lang: LangFormatFunction) => {
     shippingCostIncTax,
     coupons,
     discountAmount,
+    customerMessage,
   } = data;
 
   const {
@@ -119,6 +143,13 @@ const getOrderSummary = (data: B2BOrderData, b3Lang: LangFormatFunction) => {
     couponSymbol[key] = 'coupon';
   });
 
+  const baseGrandTotal = parseFloat((totalIncTax || totalExTax || '0').toString()) || 0;
+  const extendedTerms = getExtendedTermsFee(customerMessage || '', baseGrandTotal);
+
+  const adjustedGrandTotal = extendedTerms
+    ? baseGrandTotal + extendedTerms.fee
+    : baseGrandTotal;
+
   const labels = {
     subTotal: b3Lang('orderDetail.summary.subTotal'),
     shipping: b3Lang('orderDetail.summary.shipping'),
@@ -129,29 +160,39 @@ const getOrderSummary = (data: B2BOrderData, b3Lang: LangFormatFunction) => {
     grandTotal: b3Lang('orderDetail.summary.grandTotal'),
   };
 
+  const priceData: Record<string, string> = {
+    [labels.subTotal]: formatPrice(showInclusiveTaxPrice ? subtotalIncTax : subtotalExTax),
+    [labels.shipping]: formatPrice(
+      showInclusiveTaxPrice ? shippingCostIncTax : shippingCostExTax,
+    ),
+    [labels.handingFee]: formatPrice(handlingCostIncTax || handlingCostExTax || ''),
+    [labels.discountAmount]: formatPrice(discountAmount || ''),
+    ...couponPrice,
+    [labels.tax]: formatPrice(totalTax || ''),
+  };
+
+  const priceSymbol: Record<string, string> = {
+    [labels.subTotal]: 'subTotal',
+    [labels.shipping]: 'shipping',
+    [labels.handingFee]: 'handingFee',
+    [labels.discountAmount]: 'discountAmount',
+    ...couponSymbol,
+    [labels.tax]: 'tax',
+  };
+
+  if (extendedTerms) {
+    priceData[extendedTerms.label] = formatPrice(extendedTerms.fee);
+    priceSymbol[extendedTerms.label] = 'extendedTermsFee';
+  }
+
+  priceData[labels.grandTotal] = formatPrice(adjustedGrandTotal);
+  priceSymbol[labels.grandTotal] = 'grandTotal';
+
   const orderSummary: OrderSummary = {
     createAt: dateCreated,
     name: `${firstName} ${lastName}`,
-    priceData: {
-      [labels.subTotal]: formatPrice(showInclusiveTaxPrice ? subtotalIncTax : subtotalExTax),
-      [labels.shipping]: formatPrice(
-        showInclusiveTaxPrice ? shippingCostIncTax : shippingCostExTax,
-      ),
-      [labels.handingFee]: formatPrice(handlingCostIncTax || handlingCostExTax || ''),
-      [labels.discountAmount]: formatPrice(discountAmount || ''),
-      ...couponPrice,
-      [labels.tax]: formatPrice(totalTax || ''),
-      [labels.grandTotal]: formatPrice(totalIncTax || totalExTax || ''),
-    },
-    priceSymbol: {
-      [labels.subTotal]: 'subTotal',
-      [labels.shipping]: 'shipping',
-      [labels.handingFee]: 'handingFee',
-      [labels.discountAmount]: 'discountAmount',
-      ...couponSymbol,
-      [labels.tax]: 'tax',
-      [labels.grandTotal]: 'grandTotal',
-    },
+    priceData,
+    priceSymbol,
   };
 
   return orderSummary;

@@ -255,53 +255,58 @@ export default function AddToShoppingList(props: AddToListProps) {
                 lineHeight: 1.6,
               }}
             >
-              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold', fontSize: '1rem' }}>
-                To use a sample CSV file to upload SKUs to your Add to Cart list
-              </Typography>
               <Box component="ol" sx={{ m: 0, pl: 2.5 }}>
                 <li>
-                  Click &quot;BULK UPLOAD CSV&quot; and then &quot;Download sample&quot;
-                </li>
-                <li>
-                  &quot;variant_sku&quot; (Column A) is your desired SKU and &quot;qty&quot; (Column
-                  B) is your desired quantity
-                </li>
-                <li>
-                  It is important that the SKU values in the variant_sku field match the SKUs
-                  available on the Store
-                  <ul>
+                  To use a sample CSV file to upload SKUs to your shopping list
+                  <ol type="1" style={{ paddingLeft: '1.5rem' }}>
+                    <li>
+                      Click &quot;BULK UPLOAD CSV&quot; and then &quot;Download sample&quot;
+                    </li>
+                    <li>
+                      &quot;variant_sku&quot; (Column A) is your desired SKU and &quot;qty&quot;
+                      (Column B) is your desired quantity
+                    </li>
+                    <li>
+                      It is important that the SKU values in the variant_sku field match the SKUs
+                      available on the Store
+                    </li>
                     <li>Make sure to include any dashes or underscores</li>
                     <li>
                       If a SKU in your CSV file cannot be found in the Store, then it will not be
-                      added to your Add to Cart list
+                      added to your shopping list
                     </li>
-                  </ul>
-                </li>
-                <li>
-                  Do not change the Row 1 headings. Fill in variant_sku and qty in rows 2 and below
+                    <li>
+                      Do not change the Row 1 headings. Fill in variant_sku and qty in rows 2 and
+                      below
+                    </li>
+                  </ol>
                 </li>
                 <li>
                   Once the sample CSV file is complete, save it as a .CSV file
-                  <ul>
+                  <ol type="1" style={{ paddingLeft: '1.5rem' }}>
                     <li>
                       If using Windows Excel: Click on File &gt; Save As &gt; File Format &gt;
                       Comma Separated Values (.csv)
                     </li>
                     <li>If using Mac Numbers: Click on File &gt; Export To &gt; CSV</li>
-                  </ul>
+                  </ol>
                 </li>
-                <li>Click Upload File and select your CSV file from your file explorer</li>
                 <li>
-                  As SKUs are matched to available products in the Store, you will see the items
-                  populate on the Add to Cart list
-                  <ul>
+                  Click Upload File and select your CSV file from your file explorer
+                  <ol type="1" style={{ paddingLeft: '1.5rem' }}>
+                    <li>
+                      As SKUs are matched to available products in the Store, you will see the items
+                      populate on the shopping list
+                    </li>
                     <li>
                       If an item appears in red, then it was not matched to an available item in the
                       Store
                     </li>
-                  </ul>
+                    <li>
+                      Review the items and then click &quot;Add to Shopping List&quot;
+                    </li>
+                  </ol>
                 </li>
-                <li>Review the items and then click &quot;Add Products to Cart&quot;</li>
               </Box>
             </Box>
           </Collapse>
