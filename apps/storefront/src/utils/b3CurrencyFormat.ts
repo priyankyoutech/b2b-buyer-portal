@@ -16,7 +16,8 @@ export const currencyFormatInfo = () => {
   const currentCurrency = getActiveCurrencyInfo();
 
   return {
-    currency_location: currentCurrency.token_location || 'left',
+    currency_location:
+      (currentCurrency.token_location?.toLowerCase() as 'left' | 'right') || 'left',
     currency_token: currentCurrency.token || '$',
     decimal_token: currentCurrency.decimal_token || '.',
     decimal_places: currentCurrency.decimal_places === 0 ? 0 : currentCurrency.decimal_places || 2,
@@ -52,7 +53,7 @@ export const ordersCurrencyFormat = (
       decimalPart ? `${moneyFormat.decimal_token}${decimalPart}` : ''
     }`;
     const priceStr =
-      moneyFormat.currency_location === 'left'
+      moneyFormat.currency_location?.toLowerCase() === 'left'
         ? `${showCurrencyToken ? moneyFormat.currency_token : ''}${newPrice}`
         : `${newPrice}${showCurrencyToken ? moneyFormat.currency_token : ''}`;
     return priceStr;
@@ -79,7 +80,7 @@ export const currencyFormatConvert = (
   }: CurrencyOption,
 ) => {
   const currentCurrency = {
-    currency_location: currency?.location || 'left',
+    currency_location: (currency?.location?.toLowerCase() as 'left' | 'right') || 'left',
     currency_token: currency?.token || '$',
     decimal_token: currency?.decimalToken || '.',
     decimal_places: currency?.decimalPlaces === 0 ? 0 : currency?.decimalPlaces || 2,
@@ -104,7 +105,7 @@ export const currencyFormatConvert = (
         moneyFormat.thousands_token,
       )}${decimalPart ? `${moneyFormat.decimal_token}${decimalPart}` : ''}`;
       const priceStr =
-        moneyFormat.currency_location === 'left'
+        moneyFormat.currency_location?.toLowerCase() === 'left'
           ? `${showCurrencyToken ? moneyFormat.currency_token : ''}${newPrice}`
           : `${newPrice}${showCurrencyToken ? moneyFormat.currency_token : ''}`;
       return priceStr;
@@ -114,7 +115,7 @@ export const currencyFormatConvert = (
       decimalPart ? `${moneyFormat.decimal_token}${decimalPart}` : ''
     }`;
     const priceStr =
-      moneyFormat.currency_location === 'left'
+      moneyFormat.currency_location?.toLowerCase() === 'left'
         ? `${showCurrencyToken ? moneyFormat.currency_token : ''}${newPrice}`
         : `${newPrice}${showCurrencyToken ? moneyFormat.currency_token : ''}`;
     return priceStr;
@@ -140,7 +141,7 @@ export const currencyFormat = (
       decimalPart ? `${moneyFormat.decimal_token}${decimalPart}` : ''
     }`;
     const priceStr =
-      moneyFormat.currency_location === 'left'
+      moneyFormat.currency_location?.toLowerCase() === 'left'
         ? `${showCurrencyToken ? moneyFormat.currency_token : ''}${newPrice}`
         : `${newPrice}${showCurrencyToken ? moneyFormat.currency_token : ''}`;
     return priceStr;
