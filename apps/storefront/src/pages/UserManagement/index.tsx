@@ -8,10 +8,8 @@ import { useCardListColumn } from '@/hooks/useCardListColumn';
 import { useMobile } from '@/hooks/useMobile';
 import { useTableRef } from '@/hooks/useTableRef';
 import { useB3Lang } from '@/lib/lang';
-import { rolePermissionSelector, useAppSelector } from '@/store';
+import { useAppSelector } from '@/store';
 import { CustomerRole } from '@/types';
-import { verifyCreatePermission } from '@/utils/b3CheckPermissions/check';
-import { b2bPermissionsMap } from '@/utils/b3CheckPermissions/config';
 import { snackbar } from '@/utils/b3Tip';
 
 import { B3PaginationTable, GetRequestList } from './table/B3PaginationTable';
@@ -57,28 +55,19 @@ function UserManagement() {
 
   const companyId = Number(role) === CustomerRole.SUPER_ADMIN ? salesRepCompanyId : companyInfo?.id;
 
-  const b2bPermissions = useAppSelector(rolePermissionSelector);
   const { selectCompanyHierarchyId } = useAppSelector(
     ({ company }) => company.companyHierarchyInfo,
   );
 
-  const isEnableBtnPermissions = b2bPermissions.userCreateActionsPermission;
-
-  const customItem = useMemo(() => {
-    const { userCreateActionsPermission } = b2bPermissionsMap;
-
-    const isCreatePermission = verifyCreatePermission(
-      userCreateActionsPermission,
-      Number(selectCompanyHierarchyId),
-    );
-    return {
+  const customItem = useMemo(
+    () => ({
       isEnabled: false,
       customLabel: b3Lang('userManagement.addUser'),
-    };
-
+    }),
     // ignore b3Lang due it's function that doesn't not depend on any reactive value
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEnableBtnPermissions, selectCompanyHierarchyId]);
+    [],
+  );
 
   const addEditUserRef = useRef<RefCurrentProps | null>(null);
   const [paginationTableRef] = useTableRef();
