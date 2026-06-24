@@ -72,7 +72,7 @@ function UserManagement() {
       Number(selectCompanyHierarchyId),
     );
     return {
-      isEnabled: isEnableBtnPermissions && isCreatePermission,
+      isEnabled: false,
       customLabel: b3Lang('userManagement.addUser'),
     };
 
