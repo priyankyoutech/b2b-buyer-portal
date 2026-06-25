@@ -12,6 +12,9 @@ const themeOtherElementConfig = () => {
   // Fortune: '[href="/login.php?action=create_account"]',
   // Pinnacle: Theme Pinnacle and NextGen are compatible with the theme LifeStyle;; Artisan、CoventGarden、 Artify: method compatible
   const themeElements: ThemeElementsProps = {
+    // Customized Camden storefront: account link uses absolute hrefs and wraps
+    // the label/icon in spans, so match the anchor and all of its descendants.
+    Camden: '.navUser-item--account a, .navUser-item--account a *',
     Hera: '[href^="/account.php"] span, .account-item .account-action span svg, .account-item .account-action span svg use, [href^="/login.php?action=logout"], [href="/login.php"] .icon, .account-item .account-action span',
     RightRope:
       '[href="/account.php"] svg, [href="/account.php"] svg use, [href="/account.php"] span, [href="/account.php"], [href="/login.php"] span, [href="/login.php"] svg use, [href="/login.php"] svg, [href="/login.php"]',
